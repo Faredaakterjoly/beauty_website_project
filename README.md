@@ -1,2 +1,2 @@
-# updated_website_project
+# updated_project
 This is a beauty commerical website project
