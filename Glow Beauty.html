@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Glow Beauty | Authentic Skincare & Makeup</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-
 body {
   font-family:'Inter', 'Segoe UI', Roboto, sans-serif;
   min-height:100vh;
@@ -37,6 +36,8 @@ header {
   justify-content:space-between;
   align-items:center;
   padding: 10px 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 .brand-left {
   display: flex;
@@ -62,21 +63,41 @@ header {
 .quote-header {
   font-style:italic; 
   color:#3d2a3d; 
-  font-size:1.1rem;
+  font-size:1.100rem;
   font-weight: 500;
   text-align: center;
-  white-space: nowrap;
-  margin: 0 10px;
-  flex: 1 1 auto;
   background: transparent;
   border: none;
   padding: 0;
+  white-space: normal;
 }
 .header-right {
-  width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
   flex-shrink: 0;
 }
-.top-bar { text-align:center; }
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 1.6rem;
+}
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #b14a6b;
+  color: white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.top-bar { text-align:center; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
 .top-bar input { padding:6px; width:200px; border:1px solid #f0c0d0; border-radius:20px; }
 .top-bar button {
   padding:6px 14px; border:none; background:#b14a6b; color:white; border-radius:30px;
@@ -118,6 +139,7 @@ h3 { color:#4e3b4e; font-size:1.1rem; margin:20px 0 8px; }
   border:1px solid #ffeaf1;
   display: flex;
   flex-direction: column;
+  min-height: 480px;
 }
 .product:hover { transform:translateY(-3px); box-shadow:0 12px 20px #ecc8d6; }
 .product img { width:100%; height:130px; object-fit:cover; border-radius:14px; margin-bottom:6px; cursor:pointer; }
@@ -188,13 +210,11 @@ h3 { color:#4e3b4e; font-size:1.1rem; margin:20px 0 8px; }
   border-radius:10px;
   transition: filter 0.3s;
 }
-table { width:100%; border-collapse:collapse; font-size:0.8rem; background:rgba(255,248,250,0.8); }
+table { width:100%; border-collapse:collapse; font-size:0.8rem; background:rgba(255,248,250,0.8); margin:10px 0; }
 th, td { border:1px solid #eeb6c8; padding:8px; text-align:left; }
 th { background:#fceaea; color:#4f2d4f; }
 footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
-
-/* modal */
-.modal {
+.modal, .cart-modal {
   display: none;
   position: fixed;
   z-index: 1000;
@@ -204,29 +224,26 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   height: 100%;
   background-color: rgba(0,0,0,0.5);
   backdrop-filter: blur(3px);
+  align-items: center;
+  justify-content: center;
 }
-.modal-content {
+.modal-content, .cart-content {
   background-color: white;
-  margin: 10% auto;
   padding: 20px;
   border-radius: 24px;
   width: 90%;
   max-width: 500px;
+  max-height: 80vh;
+  overflow: auto;
   position: relative;
 }
-.close {
+.close, .close-cart, .close-order, .close-detail, .close-image {
   position: absolute;
   right: 20px;
   top: 10px;
   font-size: 28px;
   cursor: pointer;
   color: #b14a6b;
-}
-.order-form {
-  background: rgba(255,255,255,0.9);
-  border-radius: 20px;
-  padding: 15px;
-  margin: 10px 0;
 }
 .order-form input, .order-form textarea {
   width: 100%;
@@ -243,29 +260,20 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   border-radius: 30px;
   cursor: pointer;
 }
-
-/* about section */
 .about-content {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   align-items: center;
 }
-/* NEW: Background image only behind the text paragraphs + BOLD TEXT */
 .about-text {
   flex: 2 1 300px;
-  background: rgba(255, 255, 255, 0.6);
-  background-image: url('Image/Background pic.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-blend-mode: overlay; /* Keeps text readable while showing image */
+  background: rgba(255,255,255,0.6);
   padding: 20px;
   border-radius: 28px;
   font-size: 1rem;
   line-height: 1.6;
   text-align: justify;
-  font-weight: bold; /* <--- ALL TEXT IN ABOUT SECTION IS NOW BOLD */
 }
 .about-text p {
   margin: 16px 0;
@@ -287,7 +295,7 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   gap: 15px;
 }
 .image-slider-card {
-  width: 600px;
+  width: 450px;
   height: 450px;
   background: white;
   border-radius: 24px;
@@ -327,9 +335,6 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   75%,95% { transform: translateX(-75%); }
   100% { transform: translateX(0); }
 }
-.image-slider-card:hover .slider { animation-play-state: paused; }
-
-/* tips grid */
 .tips-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -361,9 +366,6 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   width: 32px;
   text-align: center;
 }
-#tips ul { display: none; }
-
-/* login section (added) */
 #login {
   text-align: center;
 }
@@ -383,7 +385,6 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   margin-top: 10px;
   cursor: pointer;
 }
-/* product image modal */
 #imageModal {
   display: none;
   position: fixed;
@@ -411,6 +412,51 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   font-weight: bold;
   cursor: pointer;
 }
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0c0d0;
+  padding: 8px 0;
+}
+.cart-item button {
+  background: #b14a6b;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 2px 8px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+#cartTotal { font-weight: bold; margin-top: 10px; }
+.empty-cart { text-align: center; padding: 20px; color: #888; }
+.user-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.9);
+  padding: 4px 12px;
+  border-radius: 30px;
+}
+#logoutBtn {
+  background: #b14a6b;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+.switch-auth {
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
+.switch-auth a {
+  color: #b14a6b;
+  cursor: pointer;
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -421,13 +467,18 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
     <div class="brand-tagline">Enhancing Your natural glow with love & care</div>
   </div>
   <div class="quote-header">"You are beautiful because your soul shines with authenticity."</div>
-  <div class="header-right"></div>
+  <div class="header-right">
+    <div class="cart-icon" id="cartIcon">🛒<span id="cartCount" class="cart-count">0</span></div>
+  </div>
 </header>
 
 <div class="top-bar">
   <input type="text" id="searchInput" placeholder="Search products...">
   <button id="searchBtn">🔍 Search</button>
-  <button onclick="showTab('login')">Sign in</button>
+  <div class="user-status" id="userStatus">
+    <span id="userNameDisplay">Guest</span>
+    <button id="logoutBtn" style="display:none;">Logout</button>
+  </div>
 </div>
 
 <nav>
@@ -437,9 +488,10 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   <button class="nav-btn" data-tab="tips">Beauty Tips</button>
   <button class="nav-btn" data-tab="routine">Skincare Routine</button>
   <button class="nav-btn" data-tab="contact-payment">Contact & Payment</button>
+  <button class="nav-btn" data-tab="login">Sign in</button>
 </nav>
 
-<!-- ABOUT SECTION (background image + bold text) -->
+<!-- ABOUT SECTION -->
 <section id="about" class="active">
   <h2>About Glow Beauty</h2>
   <div class="about-content">
@@ -447,8 +499,8 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
       <p>For beauty lovers who want high-quality makeup & skincare products at affordable prices.</p>
       <p>It provides genuine branded cosmetics in one trusted place, removing fake products and confusion from the market.</p>
       <p>Carefully curated products, affordable pricing, safe skin-friendly solutions, and customer-focused service, and <strong>also focus on teenagers</strong>.</p>
-      <p>More broadly: we believe beauty is a journey, not a mask. Every product is selected for performance, ingredient integrity, and that “glow from within” feeling. We stand for transparency, education, and making pro-level beauty accessible to everyone in Bangladesh.</p>
-      <p>Thousands of beauty lovers trust us because we deliver real results and genuine care. We personally test every brand, negotiate the best prices so you don’t overpay, and ship with utmost care. Our community shares real results — no filters, just honest beauty. Plus, you get dermatologist‑inspired routines, expiration transparency, and a loyalty program that rewards your glow journey. When you choose Glow Beauty, you’re not just buying a product; you’re embracing a philosophy that celebrates your unique radiance.</p>
+      <p>More broadly: we believe beauty is a journey, not a mask. Every product is selected for performance, ingredient integrity, and that "glow from within" feeling. We stand for transparency, education, and making pro-level beauty accessible to everyone in Bangladesh.</p>
+      <p>Thousands of beauty lovers trust us because we deliver real results and genuine care. We personally test every brand, negotiate the best prices so you don't overpay, and ship with utmost care. Our community shares real results — no filters, just honest beauty. Plus, you get dermatologist‑inspired routines, expiration transparency, and a loyalty program that rewards your glow journey. When you choose Glow Beauty, you're not just buying a product; you're embracing a philosophy that celebrates your unique radiance.</p>
       <p>We also offer free skincare consultations, detailed ingredient glossaries, and a "try it at home" sample option for select luxury items. Because you deserve to feel confident, beautiful, and completely at ease with every purchase.</p>
     </div>
     <div class="about-animations">
@@ -458,7 +510,7 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
   </div>
 </section>
 
-<!-- PRODUCTS SECTION (unchanged, massive content) -->
+<!-- PRODUCTS SECTION (COMPLETE ORIGINAL PRODUCT LIST) -->
 <section id="products">
 <h2>✨ our collections</h2>
 <div style="margin:10px 0;">
@@ -514,7 +566,7 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
     <div class="product"><img src="Image/Kiehl’s Ultra Facial Toner.jpg"><h4>Kiehl’s Ultra Facial Toner</h4><div class="price">৳2250</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Kiehl’s Ultra Facial Toner" data-price="2250" data-ingredients="Apricot kernel oil, avocado oil, squalane." data-usage="Apply with cotton pad after cleansing.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Estée Lauder Advanced Night Repair.avif"><h4>Estée Lauder Advanced Night Repair</h4><div class="price">৳6950</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Estée Lauder Advanced Night Repair" data-price="6950" data-ingredients="Chronolux™ technology, hyaluronic acid." data-usage="Apply every night before moisturizer.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Kiehl’s Ultra Facial Cream.jpg"><h4>Kiehl’s Ultra Facial Cream</h4><div class="price">৳3150</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Kiehl’s Ultra Facial Cream" data-price="3150" data-ingredients="Squalane, glycerin, apricot kernel oil." data-usage="Apply to face and neck after toner.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
-    <div class="product"><img src="Image/La Roche‑Posy Anthelios UVMune 400.jpg"><h4>La Roche‑Posay Anthelios UVMune 400</h4><div class="price">৳2650</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="La Roche‑Posay Anthelios UVMune 400" data-price="2650" data-ingredients="Mexoryl 400, thermal spring water." data-usage="Apply 15 minutes before sun exposure, reapply every 2 hours.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
+    <div class="product"><img src="Image/La Roche‑Posay Anthelios UVMune 400.jpg"><h4>La Roche‑Posay Anthelios UVMune 400</h4><div class="price">৳2650</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="La Roche‑Posay Anthelios UVMune 400" data-price="2650" data-ingredients="Mexoryl 400, thermal spring water." data-usage="Apply 15 minutes before sun exposure, reapply every 2 hours.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Paula’s Choice 1% Retinol Treatment.avif"><h4>Paula’s Choice 1% Retinol Treatment</h4><div class="price">৳5500</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Paula’s Choice 1% Retinol Treatment" data-price="5500" data-ingredients="Retinol, peptides, vitamin C." data-usage="Apply at night, starting with 2-3 times a week, increase gradually.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Paula’s Choice 2% BHA Liquid Exfoliant.avif"><h4>Paula’s Choice 2% BHA Liquid Exfoliant</h4><div class="price">৳2950</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Paula’s Choice 2% BHA Liquid Exfoliant" data-price="2950" data-ingredients="Salicylic acid, green tea extract." data-usage="Apply to a cotton pad and swipe over face after cleansing. Use 1-2 times a week.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
   </div>
@@ -570,15 +622,15 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
     <div class="product"><img src="Image/Johnson's Baby Lotion.webp"><h4>Johnson's Baby Lotion</h4><div class="price">৳450</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Johnson's Baby Lotion" data-price="450" data-ingredients="Aloe vera, vitamin E, gentle moisturizers." data-usage="Apply after bath, massage gently onto baby's skin.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Mamaearth Gentle Baby Shampoo & Wash.jpg"><h4>Mamaearth Gentle Baby Shampoo & Wash</h4><div class="price">৳590</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Mamaearth Gentle Baby Shampoo & Wash" data-price="590" data-ingredients="Coconut oil, calendula, aloe vera." data-usage="Gently massage onto hair and body, rinse with warm water.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Himalaya Baby Cream.jpg"><h4>Himalaya Baby Cream</h4><div class="price">৳390</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Himalaya Baby Cream" data-price="390" data-ingredients="Almond oil, olive oil, natural extracts." data-usage="Apply to baby's face and body after bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
-    <div class="product"><img src="Image/Mustela Hydra Bébé Body Lotion.webp"><h4>Mustela Hydra Bébé Body Lotion</h4><div class="price">৳1190</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Mustela Hydra Bébé Body Lotion" data-price="1190" data-ingredients="Avocado perseose, shea butter, vitamin E." data-usage="Apply daily to baby’s body after bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
+    <div class="product"><img src="Image/Mustela Hydra Bébé Body Lotion.webp"><h4>Mustela Hydra Bébé Body Lotion</h4><div class="price">৳1190</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Mustela Hydra Bébé Body Lotion" data-price="1190" data-ingredients="Avocado perseose, shea butter, vitamin E." data-usage="Apply daily to baby's body after bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Aveeno Baby Eczema Therapy Nighttime Balm.webp"><h4>Aveeno Baby Eczema Therapy Nighttime Balm</h4><div class="price">৳1250</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Aveeno Baby Eczema Therapy Nighttime Balm" data-price="1250" data-ingredients="Colloidal oatmeal, ceramides." data-usage="Apply to affected areas at night to soothe dry, itchy skin.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Sudocrem Antiseptic Healing Cream.avif"><h4>Sudocrem Antiseptic Healing Cream</h4><div class="price">৳690</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Sudocrem Antiseptic Healing Cream" data-price="690" data-ingredients="Zinc oxide, benzyl benzoate, lanolin." data-usage="Apply to clean, dry skin at every diaper change.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Babi Mild Double Milk Organic Powder.avif"><h4>Babi Mild Double Milk Organic Powder</h4><div class="price">৳350</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Babi Mild Double Milk Organic Powder" data-price="350" data-ingredients="Milk proteins, organic tapioca starch." data-usage="Sprinkle onto skin after bath to keep dry and soft.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
-    <div class="product"><img src="Image/Parachute Just For Baby Milky Glow Face Cream.jpg"><h4>Parachute Just For Baby Milky Glow Face Cream</h4><div class="price">৳290</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Parachute Just For Baby Milky Glow Face Cream" data-price="290" data-ingredients="Milk protein, almond oil, vitamin E." data-usage="Apply to baby’s face and body daily.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
+    <div class="product"><img src="Image/Parachute Just For Baby Milky Glow Face Cream.jpg"><h4>Parachute Just For Baby Milky Glow Face Cream</h4><div class="price">৳290</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Parachute Just For Baby Milky Glow Face Cream" data-price="290" data-ingredients="Milk protein, almond oil, vitamin E." data-usage="Apply to baby's face and body daily.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Kodomo Baby Shampoo.jpg"><h4>Kodomo Baby Shampoo</h4><div class="price">৳420</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Kodomo Baby Shampoo" data-price="420" data-ingredients="Gentle cleansers, mild fragrance." data-usage="Apply to wet hair, lather, rinse.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
-    <div class="product"><img src="Image/Sebamed Extra Soft Baby Cream.jpg"><h4>Sebamed Extra Soft Baby Cream</h4><div class="price">৳890</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Sebamed Extra Soft Baby Cream" data-price="890" data-ingredients="Panthenol, vitamin E, squalane." data-usage="Apply to baby’s skin after bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
+    <div class="product"><img src="Image/Sebamed Extra Soft Baby Cream.jpg"><h4>Sebamed Extra Soft Baby Cream</h4><div class="price">৳890</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Sebamed Extra Soft Baby Cream" data-price="890" data-ingredients="Panthenol, vitamin E, squalane." data-usage="Apply to baby's skin after bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Cetaphil Baby Daily Lotion with Natural Calendula.webp"><h4>Cetaphil Baby Daily Lotion with Natural Calendula</h4><div class="price">৳990</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Cetaphil Baby Daily Lotion with Natural Calendula" data-price="990" data-ingredients="Calendula extract, sunflower oil, shea butter." data-usage="Apply liberally after bath and throughout the day.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
-    <div class="product"><img src="Image/Mothercare All We Know Baby Oil.jpg"><h4>Mothercare All We Know Baby Oil</h4><div class="price">৳590</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Mothercare All We Know Baby Oil" data-price="590" data-ingredients="Olive oil, chamomile, vitamin E." data-usage="Gently massage onto baby’s skin before bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
+    <div class="product"><img src="Image/Mothercare All We Know Baby Oil.jpg"><h4>Mothercare All We Know Baby Oil</h4><div class="price">৳590</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Mothercare All We Know Baby Oil" data-price="590" data-ingredients="Olive oil, chamomile, vitamin E." data-usage="Gently massage onto baby's skin before bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Bepanthen Nappy Care Ointment.webp"><h4>Bepanthen Nappy Care Ointment</h4><div class="price">৳750</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Bepanthen Nappy Care Ointment" data-price="750" data-ingredients="Dexpanthenol, lanolin, almond oil." data-usage="Apply a thin layer at each diaper change to protect and heal.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
   </div>
 </div>
@@ -607,7 +659,7 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
     <div class="product"><img src="Image/Dove Sensitive Skin Beauty Bar.avif"><h4>Dove Sensitive Skin Beauty Bar</h4><div class="price">৳250</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Dove Sensitive Skin Beauty Bar" data-price="250" data-ingredients="Gentle cleansers, 1/4 moisturizing cream." data-usage="Use daily in shower or bath.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/La Roche-Posay Lipikar AP+M Triple Repair.webp"><h4>La Roche-Posay Lipikar AP+M Triple Repair</h4><div class="price">৳1850</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="La Roche-Posay Lipikar AP+M Triple Repair" data-price="1850" data-ingredients="Shea butter, niacinamide, thermal spring water." data-usage="Apply to dry, sensitive skin daily.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
     <div class="product"><img src="Image/Neutrogena Body Clear Acne Wash.webp"><h4>Neutrogena Body Clear Acne Wash</h4><div class="price">৳1150</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Neutrogena Body Clear Acne Wash" data-price="1150" data-ingredients="Salicylic acid, glycerin." data-usage="Massage onto wet skin, rinse. Use daily.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
-    <div class="product"><img src="Image/Tree Hut Shea Sugar Scrub (Watermelon).webp"><h4>Tree Hut Shea Sugar Scrub (Watermelon)</h4><div class="price">৳690</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Tree Hut Shea Sugar Scrub" data-price="690" data-ingredients="Shea butter, sugar, natural oils." data-usage="Massage onto wet skin, rinse. Use 2-3 times a week.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
+    <div class="product"><img src="Image/Tree Hut Shea Sugar Scrub (Watermelon).webp"><h4>Tree Hut Shea Sugar Scrub</h4><div class="price">৳690</div><div class="quantity-control"><button class="minus">-</button><span class="qty">1</span><button class="plus">+</button></div><div class="action-buttons"><button class="details-btn" data-name="Tree Hut Shea Sugar Scrub" data-price="690" data-ingredients="Shea butter, sugar, natural oils." data-usage="Massage onto wet skin, rinse. Use 2-3 times a week.">Details</button><button class="add-to-cart">Add to cart</button><button class="order-btn">Order now</button></div><div class="review-box"><textarea placeholder="Write your review..."></textarea><button>Submit</button></div></div>
   </div>
   <h3>💇‍♀️ Hair Care</h3>
   <div class="product-container">
@@ -619,16 +671,168 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
 </div>
 </section>
 
-<!-- ========== REMAINING SECTIONS (brands, tips, routine, contact, login) ========== -->
-<section id="brands"><h2>✨ our brands </h2><div class="brand-container"><a href="https://www.loreal.com/" target="_blank"><img src="Image/L'Oréal_logo.svg.png"></a><a href="https://www.maybelline.com/" target="_blank"><img src="Image/Maybelline_logo.jpeg"></a><a href="https://www.garnier.com/" target="_blank"><img src="Image/Garnier.png"></a><a href="https://www.neutrogena.com/" target="_blank"><img src="Image/Neutrogena.png"></a><a href="https://www.lakmeindia.com/" target="_blank"><img src="Image/Lakmé_logo.jpg"></a><a href="https://www.kiehls.com/" target="_blank"><img src="Image/Kiehl's_SVG_logo.svg.png"></a><a href="https://theordinary.com/" target="_blank"><img src="Image/the-ordinary-logo.png"></a><a href="https://www.laroche-posay.com/" target="_blank"><img src="Image/La_Roche-Posay_(brand)_logo.png"></a><a href="https://www.cerave.com/" target="_blank"><img src="Image/CeraVe_logo.png"></a><a href="https://www.paulaschoice.com/" target="_blank"><img src="Image/Paula's Choice Logo.jpeg"></a><a href="https://www.cetaphil.com/" target="_blank"><img src="Image/Cetaphil_Thailand_Logo.png"></a><a href="https://www.nivea.com/" target="_blank"><img src="Image/Nivea_logo.png"></a><a href="https://www.maccosmetics.com/" target="_blank"><img src="Image/MAC_Cosmetics_logo.png"></a><a href="https://www.narscosmetics.com/" target="_blank"><img src="Image/NARS_Cosmetics_logo.png"></a><a href="https://www.nyxcosmetics.com/" target="_blank"><img src="Image/NYX_Professional_Makeup_Logo.jpeg"></a><a href="https://www.esteelauder.com/" target="_blank"><img src="Image/Estée_Lauder_Companies_Logo.png"></a><a href="https://www.urbandecay.com/" target="_blank"><img src="Image/Urban_Decay_logo.png"></a><a href="https://www.bobbibrowncosmetics.com/" target="_blank"><img src="Image/Bobbi_Brown_logo.gif"></a><a href="https://www.swissbeauty.in/" target="_blank"><img src="Image/Swiss Beauty Logo.jpg"></a><a href="https://www.hudabeauty.com/" target="_blank"><img src="Image/Huda_Beauty_logo.png"></a><a href="https://www.imagiccosmetics.com/" target="_blank"><img src="Image/imagic_logo.png"></a><a href="https://www.pantene.com/" target="_blank"><img src="Image/Pantene_logo.png"></a><a href="https://www.dove.com/" target="_blank"><img src="Image/Dove_logo.png"></a><a href="https://www.johnsonsbaby.com/" target="_blank"><img src="Image/Johnson_and_Johnson_Logo.png"></a><a href="https://www.himalayawellness.com/" target="_blank"><img src="Image/The_Himalaya_Drug_Company_logo.svg.png"></a></div></section>
+<!-- BRANDS SECTION (full list from original) -->
+<section id="brands">
+<h2>✨ our brands</h2>
+<div class="brand-container">
+  <a href="https://www.loreal.com/" target="_blank"><img src="Image/L'Oréal_logo.svg.png"></a>
+  <a href="https://www.maybelline.com/" target="_blank"><img src="Image/Maybelline_logo.jpeg"></a>
+  <a href="https://www.garnier.com/" target="_blank"><img src="Image/Garnier.png"></a>
+  <a href="https://www.neutrogena.com/" target="_blank"><img src="Image/Neutrogena.png"></a>
+  <a href="https://www.lakmeindia.com/" target="_blank"><img src="Image/Lakmé_logo.jpg"></a>
+  <a href="https://www.kiehls.com/" target="_blank"><img src="Image/Kiehl's_SVG_logo.svg.png"></a>
+  <a href="https://theordinary.com/" target="_blank"><img src="Image/the-ordinary-logo.png"></a>
+  <a href="https://www.laroche-posay.com/" target="_blank"><img src="Image/La_Roche-Posay_(brand)_logo.png"></a>
+  <a href="https://www.cerave.com/" target="_blank"><img src="Image/CeraVe_logo.png"></a>
+  <a href="https://www.paulaschoice.com/" target="_blank"><img src="Image/Paula's Choice Logo.jpeg"></a>
+  <a href="https://www.cetaphil.com/" target="_blank"><img src="Image/Cetaphil_Thailand_Logo.png"></a>
+  <a href="https://www.nivea.com/" target="_blank"><img src="Image/Nivea_logo.png"></a>
+  <a href="https://www.maccosmetics.com/" target="_blank"><img src="Image/MAC_Cosmetics_logo.png"></a>
+  <a href="https://www.narscosmetics.com/" target="_blank"><img src="Image/NARS_Cosmetics_logo.png"></a>
+  <a href="https://www.nyxcosmetics.com/" target="_blank"><img src="Image/NYX_Professional_Makeup_Logo.jpeg"></a>
+  <a href="https://www.esteelauder.com/" target="_blank"><img src="Image/Estée_Lauder_Companies_Logo.png"></a>
+  <a href="https://www.urbandecay.com/" target="_blank"><img src="Image/Urban_Decay_logo.png"></a>
+  <a href="https://www.bobbibrowncosmetics.com/" target="_blank"><img src="Image/Bobbi_Brown_logo.gif"></a>
+  <a href="https://www.swissbeauty.in/" target="_blank"><img src="Image/Swiss Beauty Logo.jpg"></a>
+  <a href="https://www.hudabeauty.com/" target="_blank"><img src="Image/Huda_Beauty_logo.png"></a>
+  <a href="https://www.imagiccosmetics.com/" target="_blank"><img src="Image/imagic_logo.png"></a>
+  <a href="https://www.pantene.com/" target="_blank"><img src="Image/Pantene_logo.png"></a>
+  <a href="https://www.dove.com/" target="_blank"><img src="Image/Dove_logo.png"></a>
+  <a href="https://www.johnsonsbaby.com/" target="_blank"><img src="Image/Johnson_and_Johnson_Logo.png"></a>
+  <a href="https://www.himalayawellness.com/" target="_blank"><img src="Image/The_Himalaya_Drug_Company_logo.svg.png"></a>
+</div>
+</section>
 
-<section id="tips"><h2>💡 pro beauty tips</h2><div class="tips-grid"><div class="tip-card"><span class="tip-icon">🧖‍♀️</span><span class="tip-text">Always remove your makeup before bed.</span></div><div class="tip-card"><span class="tip-icon">💧</span><span class="tip-text">Drink plenty of water for dewy glow.</span></div><div class="tip-card"><span class="tip-icon">☀️</span><span class="tip-text">Wear SPF daily – best anti‑aging secret.</span></div><div class="tip-card"><span class="tip-icon">🧼</span><span class="tip-text">Clean brushes weekly to prevent breakouts.</span></div><div class="tip-card"><span class="tip-icon">💦</span><span class="tip-text">Moisturizer is non‑negotiable.</span></div><div class="tip-card"><span class="tip-icon">✨</span><span class="tip-text"><strong>Skincare Pro‑Tips:</strong> Apply hyaluronic acid to damp skin; wait 3‑5 minutes after SPF before makeup; double cleanse at night.</span></div><div class="tip-card"><span class="tip-icon">💄</span><span class="tip-text"><strong>Makeup Hacks:</strong> Warm foundation between fingers; dot concealer at inner & outer eye corners; tap matte lipstick from center outward; twist mascara wand (don’t pump).</span></div><div class="tip-card"><span class="tip-icon">🌟</span><span class="tip-text"><strong>Glow Secret:</strong> Mix a drop of serum or facial oil into foundation for a luminous, glass‑skin finish.</span></div><div class="tip-card"><span class="tip-icon">📈</span><span class="tip-text"><strong>2026 Trends:</strong> Skin‑first prep, master layering (thin to thick), ingredient awareness (azelaic acid, PDRN), and trust UGC videos.</span></div><div class="tip-card"><span class="tip-icon">🧴</span><span class="tip-text">Double cleanse in the evening: oil‑based then water‑based cleanser.</span></div><div class="tip-card"><span class="tip-icon">👁️</span><span class="tip-text">Treat the delicate eye area with a dedicated eye cream, patting gently with your ring finger.</span></div><div class="tip-card"><span class="tip-icon">🥤</span><span class="tip-text">Layer products from thinnest to thickest – toner, serum, moisturizer – for optimal absorption.</span></div><div class="tip-card"><span class="tip-icon">🦢</span><span class="tip-text">Extend your skincare down to your neck and chest; they show age just as much.</span></div><div class="tip-card"><span class="tip-icon">🧽</span><span class="tip-text">Exfoliate 1–2 times a week, no more, to reveal fresh skin without irritation.</span></div><div class="tip-card"><span class="tip-icon">🌙</span><span class="tip-text">Seal your nighttime routine with a facial oil to lock in moisture while you sleep.</span></div><div class="tip-card"><span class="tip-icon">🩹</span><span class="tip-text">Always patch test new products on your inner arm before introducing them to your face.</span></div><div class="tip-card"><span class="tip-icon">❄️</span><span class="tip-text">Store skincare in a cool, dry place away from direct sunlight to preserve potency.</span></div><div class="tip-card"><span class="tip-icon">📅</span><span class="tip-text">Check expiration dates – using expired products can do more harm than good.</span></div><div class="tip-card"><span class="tip-icon">🐢</span><span class="tip-text">Introduce active ingredients (retinol, acids) gradually, starting with 1–2 applications per week.</span></div><div class="tip-card"><span class="tip-icon">🎨</span><span class="tip-text">Choose a primer tailored to your skin’s needs – pore‑filling, hydrating, or mattifying.</span></div><div class="tip-card"><span class="tip-icon">🌊</span><span class="tip-text">Blend foundation down onto your neck for a seamless, natural transition.</span></div><div class="tip-card"><span class="tip-icon">🌸</span><span class="tip-text">If you have oily skin, set your T‑zone with a light dusting of translucent powder.</span></div><div class="tip-card"><span class="tip-icon">🪥</span><span class="tip-text">Refresh your makeup brushes weekly – it’s the simplest way to keep skin clear.</span></div><div class="tip-card"><span class="tip-icon">💨</span><span class="tip-text">A setting spray locks your look in place and melts powders into the skin.</span></div><div class="tip-card"><span class="tip-icon">🫧</span><span class="tip-text">Warm cream products (blush, foundation) on your hand before applying for effortless blending.</span></div><div class="tip-card"><span class="tip-icon">🧽</span><span class="tip-text">A damp beauty sponge creates a dewy, airbrushed effect – perfect for that lit‑from‑within glow.</span></div><div class="tip-card"><span class="tip-icon">🔺</span><span class="tip-text">Apply concealer in an upside‑down triangle under the eyes to instantly brighten and lift.</span></div><div class="tip-card"><span class="tip-icon">👁️</span><span class="tip-text">Curl your lashes before mascara for an eye‑opening effect that lasts.</span></div><div class="tip-card"><span class="tip-icon">💋</span><span class="tip-text">Line your lips with a matching liner to keep lipstick from feathering.</span></div><div class="tip-card"><span class="tip-icon">🚿</span><span class="tip-text">Wash hair with lukewarm water – hot water strips natural oils and leads to dryness.</span></div><div class="tip-card"><span class="tip-icon">🧴</span><span class="tip-text">Apply conditioner only to the mid‑lengths and ends, avoiding the scalp.</span></div><div class="tip-card"><span class="tip-icon">🔥</span><span class="tip-text">Never skip a heat protectant before styling with hot tools.</span></div><div class="tip-card"><span class="tip-icon">✂️</span><span class="tip-text">Trim your hair every 6–8 weeks to keep split ends at bay.</span></div><div class="tip-card"><span class="tip-icon">🪮</span><span class="tip-text">Instead of brushing wet hair, use a wide‑tooth comb to gently detangle and prevent breakage.</span></div><div class="tip-card"><span class="tip-icon">🛌</span><span class="tip-text">Switch to a silk or satin pillowcase to reduce friction and morning frizz.</span></div><div class="tip-card"><span class="tip-icon">🧴</span><span class="tip-text">Treat your hair to a deep‑conditioning mask once a week for intense hydration.</span></div><div class="tip-card"><span class="tip-icon">🦱</span><span class="tip-text">Avoid tight hairstyles that pull on the scalp – they can lead to hair loss over time.</span></div></div></section>
+<!-- BEAUTY TIPS SECTION (all tips from original) -->
+<section id="tips">
+<h2>💡 pro beauty tips</h2>
+<div class="tips-grid">
+  <div class="tip-card"><span class="tip-icon">🧖‍♀️</span><span class="tip-text">Always remove your makeup before bed.</span></div>
+  <div class="tip-card"><span class="tip-icon">💧</span><span class="tip-text">Drink plenty of water for dewy glow.</span></div>
+  <div class="tip-card"><span class="tip-icon">☀️</span><span class="tip-text">Wear SPF daily – best anti‑aging secret.</span></div>
+  <div class="tip-card"><span class="tip-icon">🧼</span><span class="tip-text">Clean brushes weekly to prevent breakouts.</span></div>
+  <div class="tip-card"><span class="tip-icon">💦</span><span class="tip-text">Moisturizer is non‑negotiable.</span></div>
+  <div class="tip-card"><span class="tip-icon">✨</span><span class="tip-text"><strong>Skincare Pro‑Tips:</strong> Apply hyaluronic acid to damp skin; wait 3‑5 minutes after SPF before makeup; double cleanse at night.</span></div>
+  <div class="tip-card"><span class="tip-icon">💄</span><span class="tip-text"><strong>Makeup Hacks:</strong> Warm foundation between fingers; dot concealer at inner & outer eye corners; tap matte lipstick from center outward; twist mascara wand (don't pump).</span></div>
+  <div class="tip-card"><span class="tip-icon">🌟</span><span class="tip-text"><strong>Glow Secret:</strong> Mix a drop of serum or facial oil into foundation for a luminous, glass‑skin finish.</span></div>
+  <div class="tip-card"><span class="tip-icon">📈</span><span class="tip-text"><strong>2026 Trends:</strong> Skin‑first prep, master layering (thin to thick), ingredient awareness (azelaic acid, PDRN), and trust UGC videos.</span></div>
+  <div class="tip-card"><span class="tip-icon">🧴</span><span class="tip-text">Double cleanse in the evening: oil‑based then water‑based cleanser.</span></div>
+  <div class="tip-card"><span class="tip-icon">👁️</span><span class="tip-text">Treat the delicate eye area with a dedicated eye cream, patting gently with your ring finger.</span></div>
+  <div class="tip-card"><span class="tip-icon">🥤</span><span class="tip-text">Layer products from thinnest to thickest – toner, serum, moisturizer – for optimal absorption.</span></div>
+  <div class="tip-card"><span class="tip-icon">🦢</span><span class="tip-text">Extend your skincare down to your neck and chest; they show age just as much.</span></div>
+  <div class="tip-card"><span class="tip-icon">🧽</span><span class="tip-text">Exfoliate 1–2 times a week, no more, to reveal fresh skin without irritation.</span></div>
+  <div class="tip-card"><span class="tip-icon">🌙</span><span class="tip-text">Seal your nighttime routine with a facial oil to lock in moisture while you sleep.</span></div>
+  <div class="tip-card"><span class="tip-icon">🩹</span><span class="tip-text">Always patch test new products on your inner arm before introducing them to your face.</span></div>
+  <div class="tip-card"><span class="tip-icon">❄️</span><span class="tip-text">Store skincare in a cool, dry place away from direct sunlight to preserve potency.</span></div>
+  <div class="tip-card"><span class="tip-icon">📅</span><span class="tip-text">Check expiration dates – using expired products can do more harm than good.</span></div>
+  <div class="tip-card"><span class="tip-icon">🐢</span><span class="tip-text">Introduce active ingredients (retinol, acids) gradually, starting with 1–2 applications per week.</span></div>
+  <div class="tip-card"><span class="tip-icon">🎨</span><span class="tip-text">Choose a primer tailored to your skin's needs – pore‑filling, hydrating, or mattifying.</span></div>
+  <div class="tip-card"><span class="tip-icon">🌊</span><span class="tip-text">Blend foundation down onto your neck for a seamless, natural transition.</span></div>
+  <div class="tip-card"><span class="tip-icon">🌸</span><span class="tip-text">If you have oily skin, set your T‑zone with a light dusting of translucent powder.</span></div>
+  <div class="tip-card"><span class="tip-icon">🪥</span><span class="tip-text">Refresh your makeup brushes weekly – it's the simplest way to keep skin clear.</span></div>
+  <div class="tip-card"><span class="tip-icon">💨</span><span class="tip-text">A setting spray locks your look in place and melts powders into the skin.</span></div>
+  <div class="tip-card"><span class="tip-icon">🫧</span><span class="tip-text">Warm cream products (blush, foundation) on your hand before applying for effortless blending.</span></div>
+  <div class="tip-card"><span class="tip-icon">🧽</span><span class="tip-text">A damp beauty sponge creates a dewy, airbrushed effect – perfect for that lit‑from‑within glow.</span></div>
+  <div class="tip-card"><span class="tip-icon">🔺</span><span class="tip-text">Apply concealer in an upside‑down triangle under the eyes to instantly brighten and lift.</span></div>
+  <div class="tip-card"><span class="tip-icon">👁️</span><span class="tip-text">Curl your lashes before mascara for an eye‑opening effect that lasts.</span></div>
+  <div class="tip-card"><span class="tip-icon">💋</span><span class="tip-text">Line your lips with a matching liner to keep lipstick from feathering.</span></div>
+  <div class="tip-card"><span class="tip-icon">🚿</span><span class="tip-text">Wash hair with lukewarm water – hot water strips natural oils and leads to dryness.</span></div>
+  <div class="tip-card"><span class="tip-icon">🧴</span><span class="tip-text">Apply conditioner only to the mid‑lengths and ends, avoiding the scalp.</span></div>
+  <div class="tip-card"><span class="tip-icon">🔥</span><span class="tip-text">Never skip a heat protectant before styling with hot tools.</span></div>
+  <div class="tip-card"><span class="tip-icon">✂️</span><span class="tip-text">Trim your hair every 6–8 weeks to keep split ends at bay.</span></div>
+  <div class="tip-card"><span class="tip-icon">🪮</span><span class="tip-text">Instead of brushing wet hair, use a wide‑tooth comb to gently detangle and prevent breakage.</span></div>
+  <div class="tip-card"><span class="tip-icon">🛌</span><span class="tip-text">Switch to a silk or satin pillowcase to reduce friction and morning frizz.</span></div>
+  <div class="tip-card"><span class="tip-icon">🧴</span><span class="tip-text">Treat your hair to a deep‑conditioning mask once a week for intense hydration.</span></div>
+  <div class="tip-card"><span class="tip-icon">🦱</span><span class="tip-text">Avoid tight hairstyles that pull on the scalp – they can lead to hair loss over time.</span></div>
+</div>
+</section>
 
-<section id="routine"><h2>🧴 skincare routines</h2><h3>Standard Routine (Morning & Night)</h3><table id="stdRoutine"><thead><tr><th>Step</th><th>Product Type</th><th>Recommended Brand Product</th><th>Why This Product?</th></tr></thead><tbody><tr><td>1</th><td>Cleanse</td><td>CeraVe Hydrating Facial Cleanser</td><td>Maintains the skin barrier while removing dirt.</td></tr><tr><td>2</th><td>Tone</th><td>Kiehl’s Ultra Facial Toner</th><td>Alcohol-free; preps skin to absorb treatments.</th></tr><tr><td>3</th><td>Treat</th><td>The Ordinary Niacinamide 10% + Zinc 1%</th><td>Targets pores and controls excess oil.</th></tr><tr><td>4</th><td>Repair</th><td>La Roche-Posay Toleriane Eye Cream</th><td>Soothes the delicate skin around the eyes.</th></tr><tr><td>5</th><td>Hydrate</th><td>Kiehl’s Ultra Facial Cream</th><td>24-hour hydration without greasiness.</th></tr><tr><td>6</th><td>Protect</th><td>La Roche-Posay Anthelios UVMune 400</th><td>The gold standard for UV protection.</th></tr></tbody></table><h3>🌟 Adult Skincare Routine (by Skin Type)</h3><table><thead><tr><th>Skin Type</th><th>Cleanser</th><th>Treatment</th><th>Moisturizer</th><th>Sunscreen</th></tr></thead><tbody><tr><td>Oily / Acne‑Prone</td><td>CeraVe Foaming Facial Cleanser</td><td>The Ordinary Niacinamide 10% + Zinc 1%</td><td>La Roche-Posay Effaclar Mat</td><td>Bioré UV Aqua Rich Watery Essence</td></tr><tr><td>Dry / Sensitive</td><td>Cetaphil Gentle Skin Cleanser</td><td>Laneige Water Bank Blue Hyaluronic Serum</td><td>Bubble Slam Dunk Hydrating Cream</td><td>Skin1004 Madagascar Centella Hyalu-Cica Water-Fit Sun Serum</td></tr><tr><td>Normal / Combination</td><td>Glow Recipe Blueberry Bounce Gentle Cleanser</td><td>Anua Heartleaf 77% Soothing Toner</td><td>Byoma Moisturizing Gel Cream</td><td>e.l.f. Suntouchable! Whoa Glow SPF 30</td></tr></tbody></table><h3>🧑‍🎓 Teen Skincare Routine (by Skin Type)</h3><table><thead><tr><th>Skin Type</th><th>Cleanser</th><th>Treatment</th><th>Moisturizer</th><th>Sunscreen</th><th>Extra Care</th></tr></thead><tbody><tr><td>Oily & Acne‑Prone</td><td>CeraVe Foaming Facial Cleanser</td><td>The Ordinary Niacinamide 10% + Zinc 1%</td><td>La Roche-Posay Effaclar Mat</td><td>Bioré UV Aqua Rich Watery Essence</td><td>Starface Hydro‑Stars (pimple patches)</td></tr></td><td>Dry & Sensitive</td><td>Cetaphil Gentle Skin Cleanser</td><td>Laneige Water Bank Blue Hyaluronic Serum</td><td>Bubble Slam Dunk Hydrating Cream</td><td>Skin1004 Madagascar Centella Hyalu-Cica Water-Fit Sun Serum</td><td>Laneige Lip Sleeping Mask (Berry)</td></tr><tr><td>Normal / Combination</td><td>Glow Recipe Blueberry Bounce Gentle Cleanser</td><td>Anua Heartleaf 77% Soothing Toner</td><td>Byoma Moisturizing Gel Cream</td><td>e.l.f. Suntouchable! Whoa Glow SPF 30</td><td>Sol de Janeiro Cheirosa ‘68 Perfume Mist</td></tr></tbody></table><h3>Expert Tips</h3><ul><li>The 60-Second Rule: Massage cleanser for 60 sec.</li><li>Layering Logic: Apply products from thinnest → thickest.</li><li>Vitamin C in AM, Retinol at night.</li><li>Extend skincare down neck & chest.</li></ul><h3>Weekly Enhancements</h3><ul><li>Exfoliation 2x/week: Paula’s Choice 2% BHA.</li><li>Deep Hydration: Laneige Lip Sleeping Mask overnight.</li></ul><h3>Routine for Acne-Prone Skin</h3><ul><li>Cleanse: CeraVe Acne Control Cleanser</li><li>Tone: Mario Badescu Special Cucumber Lotion</li><li>Treat: The Ordinary Niacinamide 10% + Zinc 1%</li><li>Target: Kiehl's Truly Targeted Acne-Clearing Solution</li><li>Moisturize: Peach Slices Acne Oil-Free Moisturizer</li><li>Protect: EltaMD UV Clear SPF 46</li></ul><h3>Routine for Dry & Dehydrated Skin</h3><ul><li>Cleanse: Vanicream Gentle Facial Cleanser</li><li>Tone: Thayers Milky Hydrating Face Toner</li><li>Treat: The Ordinary Hyaluronic Acid 2% + B5</li><li>Moisturize: CeraVe Moisturizing Cream</li><li>Seal: Vaseline Original Healing Jelly (optional PM)</li><li>Protect: La Roche-Posay Anthelios Melt-in Milk SPF 60</li></ul><h3>Professional Guidelines</h3><ul><li>Introduce Actives slowly (1-2x/week initially)</li><li>Consistency is Key: 4-6 weeks for visible results</li><li>Seasonal Shifts: gels in summer, rich creams in winter</li></ul></section>
+<!-- SKINCARE ROUTINE (original tables) -->
+<section id="routine">
+<h2>🧴 skincare routines</h2>
+<h3>Standard Routine (Morning & Night)</h3>
+<table id="stdRoutine">
+  <thead><tr><th>Step</th><th>Product Type</th><th>Recommended Brand Product</th><th>Why This Product?</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Cleanse</td><td>CeraVe Hydrating Facial Cleanser</td><td>Maintains the skin barrier while removing dirt.</td></tr>
+    <tr><td>2</td><td>Tone</td><td>Kiehl's Ultra Facial Toner</td><td>Alcohol-free; preps skin to absorb treatments.</td></tr>
+    <tr><td>3</td><td>Treat</td><td>The Ordinary Niacinamide 10% + Zinc 1%</td><td>Targets pores and controls excess oil.</td></tr>
+    <tr><td>4</td><td>Repair</td><td>La Roche-Posay Toleriane Eye Cream</td><td>Soothes the delicate skin around the eyes.</td></tr>
+    <tr><td>5</td><td>Hydrate</td><td>Kiehl's Ultra Facial Cream</td><td>24-hour hydration without greasiness.</td></tr>
+    <tr><td>6</td><td>Protect</td><td>La Roche-Posay Anthelios UVMune 400</td><td>The gold standard for UV protection.</td></tr>
+  </tbody>
+</table>
 
-<section id="contact-payment"><h2>📞 Contact & Payment</h2><div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;"><div style="flex: 1; background: rgba(255,255,255,0.7); border-radius: 20px; padding: 20px;"><h3>💬 Get in Touch</h3><p>📧 glowbeauty@glow.com</p><p>📞 +880 1234 567890</p><p>📱 <a href="https://wa.me/8801234567890" target="_blank">WhatsApp 💬</a> | <a href="https://m.me/glowbeauty" target="_blank">Messenger 💬</a></p><p>📍 Dhaka, Bangladesh (also virtual)</p></div><div style="flex: 1; background: rgba(255,255,255,0.7); border-radius: 20px; padding: 20px;"><h3>💳 Secure Payment</h3><ul><li>bKash / Nagad / Rocket</li><li>Visa, Mastercard, Amex</li><li>Google Pay / Apple Pay</li></ul><button id="proceedCheckout" style="background:#b14a6b; color:white; border:none; padding:8px 20px; border-radius:30px; margin-top:10px;">proceed to checkout</button></div></div></section>
+<h3>🌟 Adult Skincare Routine (by Skin Type)</h3>
+<table>
+  <thead><tr><th>Skin Type</th><th>Cleanser</th><th>Treatment</th><th>Moisturizer</th><th>Sunscreen</th></tr></thead>
+  <tbody>
+    <tr><td>Oily / Acne‑Prone</td><td>CeraVe Foaming Facial Cleanser</td><td>The Ordinary Niacinamide 10% + Zinc 1%</td><td>La Roche-Posay Effaclar Mat</td><td>Bioré UV Aqua Rich Watery Essence</td></tr>
+    <tr><td>Dry / Sensitive</td><td>Cetaphil Gentle Skin Cleanser</td><td>Laneige Water Bank Blue Hyaluronic Serum</td><td>Bubble Slam Dunk Hydrating Cream</td><td>Skin1004 Madagascar Centella Hyalu-Cica Water-Fit Sun Serum</td></tr>
+    <tr><td>Normal / Combination</td><td>Glow Recipe Blueberry Bounce Gentle Cleanser</td><td>Anua Heartleaf 77% Soothing Toner</td><td>Byoma Moisturizing Gel Cream</td><td>e.l.f. Suntouchable! Whoa Glow SPF 30</td></tr>
+  </tbody>
+</table>
 
-<section id="login"><h2>welcome back</h2><input type="text" placeholder="username or email"><br><input type="password" placeholder="password"><br><button>log in</button></section>
+<h3>🧑‍🎓 Teen Skincare Routine (by Skin Type)</h3>
+<table>
+  <thead><tr><th>Skin Type</th><th>Cleanser</th><th>Treatment</th><th>Moisturizer</th><th>Sunscreen</th><th>Extra Care</th></tr></thead>
+  <tbody>
+    <tr><td>Oily & Acne‑Prone</td><td>CeraVe Foaming Facial Cleanser</td><td>The Ordinary Niacinamide 10% + Zinc 1%</td><td>La Roche-Posay Effaclar Mat</td><td>Bioré UV Aqua Rich Watery Essence</td><td>Starface Hydro‑Stars (pimple patches)</td></tr>
+    <tr><td>Dry & Sensitive</td><td>Cetaphil Gentle Skin Cleanser</td><td>Laneige Water Bank Blue Hyaluronic Serum</td><td>Bubble Slam Dunk Hydrating Cream</td><td>Skin1004 Madagascar Centella Hyalu-Cica Water-Fit Sun Serum</td><td>Laneige Lip Sleeping Mask (Berry)</td></tr>
+    <tr><td>Normal / Combination</td><td>Glow Recipe Blueberry Bounce Gentle Cleanser</td><td>Anua Heartleaf 77% Soothing Toner</td><td>Byoma Moisturizing Gel Cream</td><td>e.l.f. Suntouchable! Whoa Glow SPF 30</td><td>Sol de Janeiro Cheirosa '68 Perfume Mist</td></tr>
+  </tbody>
+</table>
+
+<h3>Expert Tips</h3>
+<ul><li>The 60-Second Rule: Massage cleanser for 60 sec.</li><li>Layering Logic: Apply products from thinnest → thickest.</li><li>Vitamin C in AM, Retinol at night.</li><li>Extend skincare down neck & chest.</li></ul>
+<h3>Weekly Enhancements</h3>
+<ul><li>Exfoliation 2x/week: Paula's Choice 2% BHA.</li><li>Deep Hydration: Laneige Lip Sleeping Mask overnight.</li></ul>
+<h3>Routine for Acne-Prone Skin</h3>
+<ul><li>Cleanse: CeraVe Acne Control Cleanser</li><li>Tone: Mario Badescu Special Cucumber Lotion</li><li>Treat: The Ordinary Niacinamide 10% + Zinc 1%</li><li>Target: Kiehl's Truly Targeted Acne-Clearing Solution</li><li>Moisturize: Peach Slices Acne Oil-Free Moisturizer</li><li>Protect: EltaMD UV Clear SPF 46</li></ul>
+<h3>Routine for Dry & Dehydrated Skin</h3>
+<ul><li>Cleanse: Vanicream Gentle Facial Cleanser</li><li>Tone: Thayers Milky Hydrating Face Toner</li><li>Treat: The Ordinary Hyaluronic Acid 2% + B5</li><li>Moisturize: CeraVe Moisturizing Cream</li><li>Seal: Vaseline Original Healing Jelly (optional PM)</li><li>Protect: La Roche-Posay Anthelios Melt-in Milk SPF 60</li></ul>
+<h3>Professional Guidelines</h3>
+<ul><li>Introduce Actives slowly (1-2x/week initially)</li><li>Consistency is Key: 4-6 weeks for visible results</li><li>Seasonal Shifts: gels in summer, rich creams in winter</li></ul>
+</section>
+
+<!-- CONTACT & PAYMENT SECTION -->
+<section id="contact-payment">
+<h2>📞 Contact & Payment</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;">
+   <div style="flex: 1; background: rgba(255,255,255,0.7); border-radius: 20px; padding: 20px;">
+      <h3>💬 Get in Touch</h3>
+      <p>📧 glowbeauty@glow.com</p>
+      <p>📞 +880 1234 567890</p>
+      <p>📱 <a href="https://wa.me/8801234567890" target="_blank">WhatsApp 💬</a> | <a href="https://m.me/glowbeauty" target="_blank">Messenger 💬</a></p>
+      <p>📍 Dhaka, Bangladesh (also virtual)</p>
+   </div>
+   <div style="flex: 1; background: rgba(255,255,255,0.7); border-radius: 20px; padding: 20px;">
+      <h3>💳 Secure Payment</h3>
+      <ul><li>bKash / Nagad / Rocket</li><li>Visa, Mastercard, Amex</li><li>Google Pay / Apple Pay</li></ul>
+      <button id="proceedCheckout" style="background:#b14a6b; color:white; border:none; padding:8px 20px; border-radius:30px; margin-top:10px;">proceed to checkout</button>
+   </div>
+</div>
+</section>
+
+<!-- LOGIN SECTION (with register toggle) -->
+<section id="login">
+<h2>welcome back</h2>
+<div id="loginForm">
+  <input type="text" id="loginEmail" placeholder="Email"><br>
+  <input type="password" id="loginPassword" placeholder="Password"><br>
+  <button id="doLogin">log in</button>
+  <div class="switch-auth"><a id="showRegister">Create an account</a></div>
+  <p id="loginMsg"></p>
+</div>
+<div id="registerForm" style="display:none;">
+  <input type="text" id="regName" placeholder="Full Name"><br>
+  <input type="email" id="regEmail" placeholder="Email"><br>
+  <input type="password" id="regPassword" placeholder="Password"><br>
+  <button id="doRegister">Sign up</button>
+  <div class="switch-auth"><a id="showLogin">Back to login</a></div>
+  <p id="registerMsg"></p>
+</div>
+</section>
 
 <footer>©️ Glow Beauty – your authentic beauty destination</footer>
 
@@ -636,8 +840,263 @@ footer { text-align:center; font-size:0.75rem; color:#5e4b6e; margin-top:20px; }
 <div id="productModal" class="modal"><div class="modal-content"><span class="close">&times;</span><h3 id="modalTitle"></h3><p><strong>Price:</strong> ৳<span id="modalPrice"></span></p><p><strong>Ingredients:</strong> <span id="modalIngredients"></span></p><p><strong>How to use:</strong> <span id="modalUsage"></span></p></div></div>
 <div id="orderModal" class="modal"><div class="modal-content"><span class="closeOrder">&times;</span><h3>Place Your Order</h3><div class="order-form"><input type="text" id="orderName" placeholder="Full Name"><input type="text" id="orderAddress" placeholder="Delivery Address"><input type="tel" id="orderPhone" placeholder="Phone Number"><textarea id="orderNotes" placeholder="Special instructions"></textarea><button id="submitOrder">Confirm Order</button></div></div></div>
 <div id="imageModal" class="modal"><span class="image-modal-close">&times;</span><img id="modalImage" src=""></div>
+<div id="cartModal" class="cart-modal"><div class="cart-content"><span class="close-cart">&times;</span><h3>Your Cart</h3><div id="cartItemsList"></div><div id="cartTotal"></div><button id="checkoutFromCart" style="background:#b14a6b; color:white; border:none; padding:8px; border-radius:30px; width:100%; margin-top:10px;">Checkout</button></div></div>
 
 <script>
+// ========== PHP BACKEND INTEGRATION (FULL WORKING CODE) ==========
+const API_BASE = '';  // api.php is in same folder
+
+let cart = JSON.parse(localStorage.getItem('glowCart')) || [];
+let authToken = localStorage.getItem('glowToken') || null;
+let currentUser = null;
+
+function saveCart() {
+  localStorage.setItem('glowCart', JSON.stringify(cart));
+  updateCartUI();
+}
+function updateCartUI() {
+  const count = cart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').innerText = count;
+  renderCartModal();
+}
+function renderCartModal() {
+  const container = document.getElementById('cartItemsList');
+  const totalSpan = document.getElementById('cartTotal');
+  if (!container) return;
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    totalSpan.innerHTML = '';
+    return;
+  }
+  let html = '', total = 0;
+  cart.forEach((item, idx) => {
+    total += item.price * item.qty;
+    html += `<div class="cart-item">
+      <span><strong>${escapeHtml(item.name)}</strong> x${item.qty} - ৳${item.price * item.qty}</span>
+      <div>
+        <button onclick="updateQty(${idx}, -1)">-</button>
+        <button onclick="updateQty(${idx}, 1)">+</button>
+        <button onclick="removeFromCart(${idx})">🗑️</button>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+  totalSpan.innerHTML = `<strong>Total: ৳${total}</strong>`;
+}
+window.updateQty = function(idx, delta) {
+  if (cart[idx]) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart();
+  }
+}
+window.removeFromCart = function(idx) {
+  cart.splice(idx, 1);
+  saveCart();
+}
+function escapeHtml(str) {
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+function updateUserUI() {
+  const userNameSpan = document.getElementById('userNameDisplay');
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (authToken && currentUser) {
+    userNameSpan.innerText = currentUser.name;
+    logoutBtn.style.display = 'inline-block';
+  } else {
+    userNameSpan.innerText = 'Guest';
+    logoutBtn.style.display = 'none';
+  }
+}
+async function apiRequest(endpoint, method, body = null, requiresAuth = false) {
+  const url = `${API_BASE}api.php?action=${endpoint}`;
+  const headers = { 'Content-Type': 'application/json' };
+  if (requiresAuth && authToken) {
+    headers['Authorization'] = `Bearer ${authToken}`;
+  }
+  const options = { method, headers };
+  if (body) options.body = JSON.stringify(body);
+  const response = await fetch(url, options);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+async function login(email, password) {
+  try {
+    const data = await apiRequest('login', 'POST', { email, password });
+    authToken = data.token;
+    currentUser = data.user;
+    localStorage.setItem('glowToken', authToken);
+    localStorage.setItem('glowUser', JSON.stringify(currentUser));
+    updateUserUI();
+    alert(`Welcome back, ${currentUser.name}!`);
+    document.getElementById('loginMsg').innerText = '';
+    showTab('about');
+    return true;
+  } catch (err) {
+    document.getElementById('loginMsg').innerText = err.message;
+    return false;
+  }
+}
+async function register(name, email, password) {
+  try {
+    const data = await apiRequest('register', 'POST', { name, email, password });
+    authToken = data.token;
+    currentUser = data.user;
+    localStorage.setItem('glowToken', authToken);
+    localStorage.setItem('glowUser', JSON.stringify(currentUser));
+    updateUserUI();
+    alert(`Welcome to Glow Beauty, ${currentUser.name}!`);
+    showTab('about');
+    return true;
+  } catch (err) {
+    document.getElementById('registerMsg').innerText = err.message;
+    return false;
+  }
+}
+function logout() {
+  authToken = null;
+  currentUser = null;
+  localStorage.removeItem('glowToken');
+  localStorage.removeItem('glowUser');
+  updateUserUI();
+  alert('Logged out successfully');
+  showTab('about');
+}
+async function placeOrder(orderData) {
+  if (!authToken) {
+    alert('Please login to place an order');
+    showTab('login');
+    return false;
+  }
+  try {
+    const data = await apiRequest('orders', 'POST', orderData, true);
+    alert(`Order placed successfully! Order ID: ${data.orderId}`);
+    return true;
+  } catch (err) {
+    alert(err.message);
+    return false;
+  }
+}
+// Event handlers
+function attachCartEvents() {
+  document.querySelectorAll('.add-to-cart').forEach(btn => {
+    btn.removeEventListener('click', cartHandler);
+    btn.addEventListener('click', cartHandler);
+  });
+}
+function cartHandler(e) {
+  const productDiv = e.target.closest('.product');
+  const name = productDiv.querySelector('h4').innerText;
+  const priceText = productDiv.querySelector('.price').innerText;
+  const price = parseInt(priceText.replace('৳', ''));
+  const qtySpan = productDiv.querySelector('.qty');
+  let qty = qtySpan ? parseInt(qtySpan.innerText) : 1;
+  const existing = cart.find(item => item.name === name);
+  if (existing) existing.qty += qty;
+  else cart.push({ name, price, qty });
+  saveCart();
+  alert('Added to cart!');
+}
+let currentOrderItems = null;
+function attachOrderEvents() {
+  document.querySelectorAll('.order-btn').forEach(btn => {
+    btn.removeEventListener('click', orderHandler);
+    btn.addEventListener('click', orderHandler);
+  });
+}
+function orderHandler(e) {
+  const productDiv = e.target.closest('.product');
+  const name = productDiv.querySelector('h4').innerText;
+  const priceText = productDiv.querySelector('.price').innerText;
+  const price = parseInt(priceText.replace('৳', ''));
+  const qtySpan = productDiv.querySelector('.qty');
+  let qty = qtySpan ? parseInt(qtySpan.innerText) : 1;
+  currentOrderItems = [{ name, price, qty }];
+  document.getElementById('orderModal').style.display = 'flex';
+}
+function attachDetailsEvents() {
+  document.querySelectorAll('.details-btn').forEach(btn => {
+    btn.removeEventListener('click', detailsHandler);
+    btn.addEventListener('click', detailsHandler);
+  });
+}
+function detailsHandler(e) {
+  document.getElementById('modalTitle').innerText = e.target.dataset.name;
+  document.getElementById('modalPrice').innerText = e.target.dataset.price;
+  document.getElementById('modalIngredients').innerText = e.target.dataset.ingredients || 'Not specified';
+  document.getElementById('modalUsage').innerText = e.target.dataset.usage || 'Apply as directed.';
+  document.getElementById('productModal').style.display = 'block';
+}
+function attachImageEvents() {
+  document.querySelectorAll('.product img').forEach(img => {
+    img.removeEventListener('click', imageHandler);
+    img.addEventListener('click', imageHandler);
+  });
+}
+function imageHandler(e) {
+  document.getElementById('modalImage').src = e.target.src;
+  document.getElementById('imageModal').style.display = 'flex';
+}
+function attachQuantityEvents() {
+  document.querySelectorAll('.product').forEach(prod => {
+    const minus = prod.querySelector('.minus');
+    const plus = prod.querySelector('.plus');
+    const qtySpan = prod.querySelector('.qty');
+    if (minus && plus && qtySpan) {
+      minus.onclick = () => { let q = parseInt(qtySpan.innerText); if (q > 1) qtySpan.innerText = q - 1; };
+      plus.onclick = () => { let q = parseInt(qtySpan.innerText); qtySpan.innerText = q + 1; };
+    }
+  });
+}
+function refreshAllEvents() {
+  attachCartEvents();
+  attachOrderEvents();
+  attachDetailsEvents();
+  attachImageEvents();
+  attachQuantityEvents();
+}
+function resetSearch() {
+  document.getElementById('searchInput').value = '';
+  const allProducts = document.querySelectorAll('#products .product');
+  allProducts.forEach(prod => prod.style.display = '');
+  refreshAllEvents();
+}
+function searchProducts() {
+  const term = document.getElementById('searchInput').value.toLowerCase().trim();
+  const allProducts = document.querySelectorAll('#products .product');
+  if (term === '') {
+    allProducts.forEach(prod => prod.style.display = '');
+    refreshAllEvents();
+    return;
+  }
+  let anyMatch = false;
+  allProducts.forEach(prod => {
+    const name = prod.querySelector('h4').innerText.toLowerCase();
+    if (name.includes(term)) {
+      prod.style.display = '';
+      anyMatch = true;
+    } else {
+      prod.style.display = 'none';
+    }
+  });
+  if (!anyMatch) alert('No products found.');
+  refreshAllEvents();
+}
+function showProductCategory(catId) {
+  resetSearch();
+  const categories = ['makeup', 'skincare', 'body', 'hair', 'baby', 'teen'];
+  categories.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (id === catId) ? 'block' : 'none';
+  });
+  refreshAllEvents();
+}
 function showTab(tabId) {
   document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
@@ -645,110 +1104,117 @@ function showTab(tabId) {
     btn.classList.remove('active');
     if (btn.getAttribute('data-tab') === tabId) btn.classList.add('active');
   });
-}
-function showProductCategory(catId) {
-  const categories = ['makeup', 'skincare', 'body', 'hair', 'baby', 'teen'];
-  categories.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = (id === catId) ? 'block' : 'none';
-  });
-}
-document.getElementById('makeup').style.display = 'block';
-
-document.querySelectorAll('.nav-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tabId = btn.getAttribute('data-tab');
-    if (tabId) showTab(tabId);
-  });
-});
-
-// Quantity +/- and Add to cart
-document.querySelectorAll('.product').forEach(prod => {
-  const minus = prod.querySelector('.minus');
-  const plus = prod.querySelector('.plus');
-  const qtySpan = prod.querySelector('.qty');
-  if (minus && plus && qtySpan) {
-    minus.addEventListener('click', () => { let q = parseInt(qtySpan.innerText); if (q>1) qtySpan.innerText = q-1; });
-    plus.addEventListener('click', () => { let q = parseInt(qtySpan.innerText); qtySpan.innerText = q+1; });
+  if (tabId === 'products') {
+    resetSearch();
+    refreshAllEvents();
   }
-  const addBtn = prod.querySelector('.add-to-cart');
-  if (addBtn) addBtn.addEventListener('click', () => alert('Item added to cart!'));
-});
-
-// Details modal
-const modal = document.getElementById('productModal');
-const modalTitle = document.getElementById('modalTitle');
-const modalPrice = document.getElementById('modalPrice');
-const modalIngredients = document.getElementById('modalIngredients');
-const modalUsage = document.getElementById('modalUsage');
-document.querySelectorAll('.details-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    modalTitle.innerText = btn.dataset.name;
-    modalPrice.innerText = btn.dataset.price;
-    modalIngredients.innerText = btn.dataset.ingredients || 'Not specified';
-    modalUsage.innerText = btn.dataset.usage || 'Apply as directed.';
-    modal.style.display = 'block';
+}
+// Modal close handlers
+document.querySelectorAll('.close, .closeOrder, .close-cart, .image-modal-close').forEach(el => {
+  el.addEventListener('click', () => {
+    document.getElementById('productModal').style.display = 'none';
+    document.getElementById('orderModal').style.display = 'none';
+    document.getElementById('imageModal').style.display = 'none';
+    document.getElementById('cartModal').style.display = 'none';
   });
 });
-document.querySelector('.close').addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', (e) => { if (e.target == modal) modal.style.display = 'none'; });
-
-// Image modal for product pictures
-const imageModal = document.getElementById('imageModal');
-const modalImage = document.getElementById('modalImage');
-document.querySelectorAll('.product img').forEach(img => {
-  img.addEventListener('click', () => {
-    modalImage.src = img.src;
-    imageModal.style.display = 'flex';
-  });
+window.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+  if (e.target.classList.contains('cart-modal')) e.target.style.display = 'none';
 });
-document.querySelector('.image-modal-close').addEventListener('click', () => imageModal.style.display = 'none');
-window.addEventListener('click', (e) => { if (e.target == imageModal) imageModal.style.display = 'none'; });
-
-// Order now form
-let currentOrderProduct = null;
-document.querySelectorAll('.order-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    const prodDiv = e.target.closest('.product');
-    const name = prodDiv.querySelector('h4').innerText;
-    const qty = prodDiv.querySelector('.qty') ? prodDiv.querySelector('.qty').innerText : '1';
-    currentOrderProduct = { name, qty };
-    document.getElementById('orderModal').style.display = 'block';
-  });
+// Cart modal and checkout
+document.getElementById('cartIcon').addEventListener('click', () => {
+  renderCartModal();
+  document.getElementById('cartModal').style.display = 'flex';
 });
-document.querySelector('.closeOrder').addEventListener('click', () => document.getElementById('orderModal').style.display = 'none');
-document.getElementById('submitOrder').addEventListener('click', () => {
+document.getElementById('checkoutFromCart')?.addEventListener('click', () => {
+  if (cart.length === 0) alert('Your cart is empty.');
+  else {
+    currentOrderItems = [...cart];
+    document.getElementById('cartModal').style.display = 'none';
+    document.getElementById('orderModal').style.display = 'flex';
+  }
+});
+document.getElementById('proceedCheckout')?.addEventListener('click', () => {
+  if (cart.length === 0) alert('Your cart is empty.');
+  else {
+    currentOrderItems = [...cart];
+    document.getElementById('orderModal').style.display = 'flex';
+  }
+});
+// Order submission
+document.getElementById('submitOrder').addEventListener('click', async () => {
   const name = document.getElementById('orderName').value;
   const address = document.getElementById('orderAddress').value;
   const phone = document.getElementById('orderPhone').value;
-  if (!name || !address || !phone) { alert('Please fill all fields.'); return; }
-  alert(`Order placed for ${currentOrderProduct.name} (Qty: ${currentOrderProduct.qty})!\nWe will contact you at ${phone}.`);
-  document.getElementById('orderModal').style.display = 'none';
-  document.getElementById('orderName').value = '';
-  document.getElementById('orderAddress').value = '';
-  document.getElementById('orderPhone').value = '';
-  document.getElementById('orderNotes').value = '';
-});
-
-// Search
-document.getElementById('searchBtn').addEventListener('click', () => {
-  const term = document.getElementById('searchInput').value.toLowerCase().trim();
-  const activeCategoryDiv = document.querySelector('#products .product-category[style*="block"]');
-  if (!activeCategoryDiv) return;
-  const products = activeCategoryDiv.querySelectorAll('.product');
-  let anyMatch = false;
-  products.forEach(p => {
-    const name = p.querySelector('h4').innerText.toLowerCase();
-    if (name.includes(term) || term === '') {
-      p.style.display = '';
-      anyMatch = true;
-    } else {
-      p.style.display = 'none';
+  const notes = document.getElementById('orderNotes').value;
+  if (!name || !address || !phone) {
+    alert('Please fill all fields.');
+    return;
+  }
+  if (!currentOrderItems || currentOrderItems.length === 0) {
+    alert('No items to order.');
+    return;
+  }
+  const total = currentOrderItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  const orderData = { items: currentOrderItems, total, address, phone, notes };
+  const success = await placeOrder(orderData);
+  if (success) {
+    if (currentOrderItems === cart) {
+      cart = [];
+      saveCart();
     }
-  });
-  if (!anyMatch && term !== '') alert('No products found.');
+    currentOrderItems = null;
+    document.getElementById('orderModal').style.display = 'none';
+    document.getElementById('orderName').value = '';
+    document.getElementById('orderAddress').value = '';
+    document.getElementById('orderPhone').value = '';
+    document.getElementById('orderNotes').value = '';
+  }
 });
-document.getElementById('proceedCheckout').addEventListener('click', () => alert('Checkout simulated. Thank you!'));
+// Login UI
+document.getElementById('doLogin').addEventListener('click', async () => {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  await login(email, password);
+});
+document.getElementById('doRegister').addEventListener('click', async () => {
+  const name = document.getElementById('regName').value;
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+  if (!name || !email || !password) {
+    document.getElementById('registerMsg').innerText = 'All fields required';
+    return;
+  }
+  await register(name, email, password);
+});
+document.getElementById('showRegister').addEventListener('click', () => {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'block';
+});
+document.getElementById('showLogin').addEventListener('click', () => {
+  document.getElementById('loginForm').style.display = 'block';
+  document.getElementById('registerForm').style.display = 'none';
+});
+document.getElementById('logoutBtn').addEventListener('click', logout);
+// Navigation
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => showTab(btn.getAttribute('data-tab')));
+});
+document.getElementById('searchBtn').addEventListener('click', searchProducts);
+document.querySelector('.top-bar button[onclick="showTab(\'login\')"]').onclick = () => showTab('login');
+// Initialize
+document.getElementById('makeup').style.display = 'block';
+refreshAllEvents();
+// Restore session
+const savedToken = localStorage.getItem('glowToken');
+const savedUser = localStorage.getItem('glowUser');
+if (savedToken && savedUser) {
+  authToken = savedToken;
+  currentUser = JSON.parse(savedUser);
+  updateUserUI();
+}
+updateCartUI();
 </script>
 </body>
 </html>
